@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch火柴人 - 创意科技与教育</title>
+    <meta name="description" content="Scratch火柴人专注于创意科技与教育，提供Scratch编程资源、教育内容和创意作品。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F1EEBD',
+                        secondary: '#8A9A5B',
+                        accent: '#FF6B35',
+                        dark: '#333333',
+                        light: '#F9F9F9'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 2px 2px 15px rgba(66, 66, 66, 0.5);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .scroll-smooth {
+                scroll-behavior: smooth;
+            }
+            .loading-spin {
+                animation: spin 1.5s linear infinite;
+            }
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            .fade-out {
+                animation: fadeOut 0.5s forwards;
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; visibility: visible; }
+                to { opacity: 0; visibility: hidden; pointer-events: none; }
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light text-dark antialiased scroll-smooth overflow-hidden">
+    <!-- 加载动画 -->
+    <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-dark">
+        <div class="text-center">
+            <div class="w-16 h-16 border-4 border-primary border-t-accent rounded-full loading-spin mx-auto mb-6"></div>
+            <p class="text-white text-xl">正在加载中...</p>
+            <p class="text-gray-400 mt-2">请稍候，我们正在准备精彩内容</p>
+        </div>
+        <div class="absolute inset-0 opacity-30">
+            <img id="random-bg" src="" alt="随机背景" class="w-full h-full object-cover">
+        </div>
+    </div>
+    <body class="font-inter bg-light text-dark antialiased scroll-smooth">
+        <!-- 导航栏 -->
+        <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+            <nav class="bg-primary/90 bg-blur shadow-md">
+                <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                    <a href="#" class="flex items-center space-x-2">
+                        <img src="picture/LOGO/scratch'cat.png" alt="Scratch火柴人LOGO" class="w-10 h-10 rounded-full">
+                        <span class="text-xl font-bold text-dark">Scratch火柴人</span>
+                    </a>
+                    
+                    <!-- 桌面导航 -->
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#welcome" class="text-dark hover:text-accent transition-colors duration-200">首页</a>
+                        <a href="#news" class="text-dark hover:text-accent transition-colors duration-200">最新动态</a>
+                        <a href="#popular" class="text-dark hover:text-accent transition-colors duration-200">热门内容</a>
+                        <a href="#resources" class="text-dark hover:text-accent transition-colors duration-200">附件中心</a>
+                        <a href="#about" class="text-dark hover:text-accent transition-colors duration-200">关于我们</a>
+                        <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            关注博主
+                        </a>
+                    </div>
+                    
+                    <!-- 移动端菜单按钮 -->
+                    <button id="menu-toggle" class="md:hidden text-dark focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+                
+                <!-- 移动端导航菜单 -->
+                <div id="mobile-menu" class="md:hidden hidden bg-primary/95 bg-blur">
+                    <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                        <a href="#welcome" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">首页</a>
+                        <a href="#news" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">最新动态</a>
+                        <a href="#popular" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">热门内容</a>
+                        <a href="#resources" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">资源中心</a>
+                        <a href="#about" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">关于我们</a>
+                        <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-center">
+                            关注博主
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    
+        <!-- 欢迎部分 -->
+        <section id="welcome" class="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-secondary/10 to-primary/20">
+            <div class="absolute inset-0 z-0">
+                <img src="picture/background.jpg" alt="背景图" class="w-full h-full object-cover opacity-30">
+            </div>
+            <div class="container mx-auto px-4 z-10 text-center">
+                <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-bold text-dark text-shadow mb-6 opacity-0 animate-fade-in" style="animation-delay: 0.3s">
+                    Hi，别来无恙呀！
+                </h1>
+                <h3 class="text-[clamp(1.2rem,2vw,1.8rem)] text-dark/80 mb-10 opacity-0 animate-fade-in" style="animation-delay: 0.6s">
+                    创意无限！欢迎来到 Scratch火柴人 的网站
+                </h3>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 opacity-0 animate-fade-in" style="animation-delay: 0.9s">
+                    <a href="#news" class="bg-secondary hover:bg-secondary/90 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        探索最新热点
+                    </a>
+                    <a href="#resources" class="bg-accent hover:bg-accent/90 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        查看附件列表
+                    </a>
+                </div>
+            </div>
+            <div class="absolute bottom-8 left-0 right-0 text-center animate-bounce">
+                <a href="#news" class="text-dark/70 hover:text-dark transition-colors">
+                    <i class="fa-solid fa-chevron-down text-2xl"></i>
+                </a>
+            </div>
+        </section>
+    
+        <!-- 最新动态部分 -->
+        <section id="news" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-dark mb-4">近日热点</h2>
+                    <div class="w-24 h-1 bg-accent mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 动态卡片1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="picture/twoyears.png" alt="大牙不大-大牙系列发布" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute top-4 right-4 bg-accent text-white text-sm font-semibold px-3 py-1 rounded-full">
+                                最新发布
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors duration-200">大牙不大-大牙系列发布！</h3>
+                            <p class="text-gray-600 mb-4">大牙科技是我们的一个新系列，包括教育、科技、生活资源，未来，我们将添加更多内容！</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500 text-sm">2025-05-01</span>
+                                <a href="https://scratchhcr.github.io/big_teeth/welcome.html" target="_blank" class="text-accent font-medium hover:underline flex items-center">
+                                    阅读详情 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="picture/lpctcomputer.jpg" alt="手搓抽屉电脑，优势在我" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute top-4 right-4 bg-accent text-white text-sm font-semibold px-3 py-1 rounded-full">
+                                当前最热
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors duration-200">黄头手搓：抽屉电脑</h3>
+                            <p class="text-gray-600 mb-4">有同学问，开学了家长不让玩电脑怎么办？我不理解，你不会手搓一个抽屉电脑吗？手搓抽屉电脑，优势在我！</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500 text-sm">2025-05-02</span>
+                                <a href="https://www.xiaohongshu.com/explore/68162884000000002100051b?xsec_token=ABtnNHqfj37AG4ilKh5imA5Cf_hob5IVrU15y8pFQwpHg=&xsec_source=pc_user" target="_blank" class="text-accent font-medium hover:underline flex items-center">
+                                    阅读详情 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="picture/NOschool.png" alt="新型班会？我悟了" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors duration-200">新型班会？我悟了</h3>
+                            <p class="text-gray-600 mb-4">最近流行上了一种新型的班会教育科，通过绘画让学生远离校园霸凌。那么……</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500 text-sm">2025-05-03</span>
+                                <a href="https://www.xiaohongshu.com/explore/68147307000000002002bf26?xsec_token=AB2Nr6D0pen_RQRdRVHwGNj6xenb4g7YxWMjp0jmrEIl0=&xsec_source=pc_user" target="_blank" class="text-accent font-medium hover:underline flex items-center">
+                                    阅读详情 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-12">
+                    <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank">
+                        <p>查看更多动态<i class="fa-solid fa-angle-right ml-2"></i></p>
+                         
+                    </a>
+                </div>
+            </div>
+        </section>
+    
+        <!-- 热门内容部分 -->
+        <section id="popular" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-dark mb-4">大家都在看</h2>
+                    <div class="w-24 h-1 bg-accent mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row group hover:shadow-xl transition-all duration-300">
+                        <div class="md:w-1/2 relative h-64 md:h-auto overflow-hidden">
+                            <img src="picture/lpctcomputer.jpg" alt="手搓抽屉电脑，优势在我" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="md:w-1/2 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors duration-200">手搓抽屉电脑，优势在我</h3>
+                                <p class="text-gray-600 mb-4">有同学问，开学了家长不让玩电脑怎么办？我不理解，你不会手搓一个抽屉电脑吗？手搓抽屉电脑，优势在我！</p>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500 text-sm">2025-05-02</span>
+                                <a href="https://www.xiaohongshu.com/explore/68162884000000002100051b?xsec_token=ABtnNHqfj37AG4ilKh5imA5Cf_hob5IVrU15y8pFQwpHg=&xsec_source=pc_user" target="_blank" class="text-accent font-medium hover:underline flex items-center">
+                                    查看详情 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row group hover:shadow-xl transition-all duration-300">
+                        <div class="md:w-1/2 relative h-64 md:h-auto overflow-hidden">
+                            <img src="picture/flash.png" alt="Flash插件安装指南" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        </div>
+                        <div class="md:w-1/2 p-6 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold mb-3 group-hover:text-accent transition-colors duration-200">怎么安装正版Flash插件？</h3>
+                                <p class="text-gray-600 mb-4">Flash曾经是全球著名的动画制作软件，不过由于后期缺乏维护，导致其于2020年12月31日停止维护。后期abode又出了一款名为flash中心的游戏软件，不过这并不是真正的flash插件，那么怎么安装正版呢？</p>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-500 text-sm">2025-04-04</span>
+                                <a href="https://www.xiaohongshu.com/explore/67a46726000000002602e9e5" target="_blank" class="text-accent font-medium hover:underline flex items-center">
+                                    查看详情 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- 资源中心部分 -->
+        <section id="resources" class="py-20 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-dark mb-4">资源中心</h2>
+                    <div class="w-24 h-1 bg-accent mx-auto rounded-full"></div>
+                    <p class="text-gray-600 mt-4 max-w-2xl mx-auto">视频附件：它包含我们所发视频中所需的素材和资源，我们提供三种下载方式。</p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- 资源卡片1 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 text-center transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-globe text-2xl text-secondary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">网站下载</h3>
+                        <p class="text-gray-600 mb-6">附件表网站下载，内容全面，更新及时，推荐使用。</p>
+                        <a href="https://scratchhcr.github.io/up_scratchhcr/FuMian.html" target="_blank" class="inline-block bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                            访问网站
+                        </a>
+                    </div>
+                    
+                    <!-- 资源卡片2 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 text-center transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-cloud text-2xl text-secondary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">123云盘</h3>
+                        <p class="text-gray-600 mb-6">123云盘下载，速度快，稳定性高。</p>
+                        <a href="https://www.123pan.com/s/aBTyjv-kfBJA.html" target="_blank" class="inline-block bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                            访问云盘
+                        </a>
+                    </div>
+                    
+                    <!-- 资源卡片3 -->
+                    <div class="bg-white rounded-xl shadow-lg p-8 text-center transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2">
+                        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fa-solid fa-database text-2xl text-secondary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">yukaidi网盘</h3>
+                        <p class="text-gray-600 mb-6">yukaidi网盘下载，资源丰富，分类清晰。</p>
+                        <a href="https://pan.yukaidi.com/s/p3ggHm?path=%2F" target="_blank" class="inline-block bg-secondary hover:bg-secondary/90 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                            访问网盘
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- 关于我们部分 -->
+        <section id="about" class="py-20 bg-gray-50">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-bold text-dark mb-4">关于我们</h2>
+                    <div class="w-24 h-1 bg-accent mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6">专业远程解决各种疑难杂症</h3>
+                        <p class="text-gray-600 mb-6">Scratch火柴人专业远程解决各种疑难杂症，上至配置环境，下至安装软件。专业重装系统，安装专业软件，物美价廉。</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                            <div class="flex items-start">
+                                <div class="mr-2 mt-1">
+                                    <i class="fa-solid fa-check-circle text-accent text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-2">全方位服务</h4>
+                                    <p class="text-gray-600">从软件安装到系统配置，我们提供全方位的技术服务。</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="mr-2 mt-1">
+                                    <i class="fa-solid fa-check-circle text-accent text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold mb-2">性价比高</h4>
+                                    <p class="text-gray-600">提供专业服务的同时，保持合理的价格，让您获得最大的价值。</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="rounded-xl overflow-hidden shadow-2xl">
+                            <img src="picture/about_us.jpg" alt="关于我们" class="w-full h-auto">
+                        </div>
+                        <div class="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg max-w-xs">
+                            <div class="flex items-center mb-4">
+                                <div>
+                                    <h4 class="font-bold">向为本网页提供支持者致谢</h4>
+                                    <p class="text-gray-500 text-sm">特别感谢以下支持者（依对本网页贡献大小排序，点击查看）</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <a href="https://www.xiaohongshu.com/user/profile/5e75a5450000000001003a66" target="_blank" class="px-3 py-1 bg-gray-100 rounded-full text-sm hover:bg-primary transition-colors">汇委</a>
+                                <a href="https://www.xiaohongshu.com/user/profile/5d4f5805000000001602e0c2" target="_blank" class="px-3 py-1 bg-gray-100 rounded-full text-sm hover:bg-primary transition-colors">小孩哥</a>
+                                <a href="https://www.xiaohongshu.com/user/profile/5a96403011be10615e661a43" target="_blank" class="px-3 py-1 bg-gray-100 rounded-full text-sm hover:bg-primary transition-colors">北北</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+        <!-- 页脚 -->
+        <footer class="bg-dark text-white py-12">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                    <div>
+                        <div class="flex items-center space-x-2 mb-6">
+                            <img src="picture/LOGO/scratch'cat.png" alt="Scratch火柴人LOGO" class="w-10 h-10 rounded-full">
+                            <span class="text-xl font-bold">Scratch火柴人</span>
+                        </div>
+                        <p class="text-gray-400 mb-6">专注于创意科技与教育，提供Scratch编程资源、教育内容和创意作品。</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold mb-6">快速链接</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#welcome" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                            <li><a href="#news" class="text-gray-400 hover:text-white transition-colors">最新动态</a></li>
+                            <li><a href="#popular" class="text-gray-400 hover:text-white transition-colors">热门内容</a></li>
+                            <li><a href="#resources" class="text-gray-400 hover:text-white transition-colors">资源中心</a></li>
+                            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold mb-6">资源链接</h4>
+                        <ul class="space-y-3">
+                            <li><a href="https://scratchhcr.github.io/up_scratchhcr/FuMian.html" target="_blank" class="text-gray-400 hover:text-white transition-colors">附件表网站</a></li>
+                            <li><a href="https://www.123pan.com/s/aBTyjv-kfBJA.html" target="_blank" class="text-gray-400 hover:text-white transition-colors">123云盘</a></li>
+                            <li><a href="https://pan.yukaidi.com/s/p3ggHm?path=%2F" target="_blank" class="text-gray-400 hover:text-white transition-colors">yukaidi网盘</a></li>
+                            <li><a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="text-gray-400 hover:text-white transition-colors">小红书主页</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-bold mb-6">联系我们</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-envelope text-accent mt-1 mr-3"></i>
+                                <span class="text-gray-400">邮箱📮：<br>scratchhcr@qq.com<br>scratchhcr@outlook.com</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fa-solid fa-map-marker text-accent mt-1 mr-3"></i>
+                                <span class="text-gray-400">辽宁沈阳啥也不是诈骗集团</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
+                    <p>Scratch火柴人 &copy; 2025 版权所有</p>
+                </div>
+            </div>
+        </footer>
+
+    <script>
+        // 随机背景图
+        const randomBg = document.getElementById('random-bg');
+        const randomBgId = Math.floor(Math.random() * 100);
+        randomBg.src = `https://picsum.photos/id/${randomBgId}/1920/1080`;
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            // 获取所有图片元素
+            const images = document.querySelectorAll('img');
+            const totalImages = images.length;
+            let loadedImages = 0;
+            
+            // 显示加载进度
+            const updateProgress = () => {
+                const progress = (loadedImages / totalImages) * 100;
+                console.log(`图片加载进度: ${progress}%`);
+            };
+            
+            // 检查所有图片是否加载完成
+            const checkAllImagesLoaded = () => {
+                if (loadedImages === totalImages) {
+                    // 所有图片加载完成，隐藏加载屏幕
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').classList.add('fade-out');
+                        // 显示网页内容
+                        document.getElementById('navbar').style.opacity = '1';
+                        document.getElementById('welcome').style.opacity = '1';
+                        document.getElementById('news').style.opacity = '1';
+                        document.getElementById('popular').style.opacity = '1';
+                        document.getElementById('resources').style.opacity = '1';
+                        document.getElementById('about').style.opacity = '1';
+                        document.querySelector('footer').style.opacity = '1';
+                        // 允许页面滚动
+                        document.body.style.overflow = 'auto';
+                    }, 500); // 延迟一下，让淡入淡出效果更明显
+                }
+            };
+            
+            // 为每张图片添加加载事件
+            images.forEach(img => {
+                // 如果图片已经加载完成
+                if (img.complete) {
+                    loadedImages++;
+                    updateProgress();
+                    checkAllImagesLoaded();
+                } else {
+                    // 图片加载完成时
+                    img.addEventListener('load', () => {
+                        loadedImages++;
+                        updateProgress();
+                        checkAllImagesLoaded();
+                    });
+                    
+                    // 图片加载失败时
+                    img.addEventListener('error', () => {
+                        loadedImages++;
+                        console.error('图片加载失败:', img.src);
+                        updateProgress();
+                        checkAllImagesLoaded();
+                    });
+                }
+            });
+            
+            // 如果没有图片或图片都已加载完成
+            if (totalImages === 0) {
+                checkAllImagesLoaded();
+            }
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-primary', 'shadow-md');
+                    navbar.classList.remove('bg-transparent');
+                } else {
+                    navbar.classList.remove('bg-primary', 'shadow-md');
+                    navbar.classList.add('bg-transparent');
+                }
+            });
+            
+            // 移动端菜单切换
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // 关闭移动端菜单
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+            
+            // 添加淡入动画
+            const animateElements = document.querySelectorAll('.animate-fade-in');
+            animateElements.forEach(el => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            });
+        });
+    </script>
+</body>
+</html>    
