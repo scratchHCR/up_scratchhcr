@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scratch火柴人 - 创意科技与教育</title>
+    <title>Scratch火柴人</title>
+    <link rel="website icons" type="png" href="picture\LOGO\scratch_cat.png">
     <meta name="description" content="Scratch火柴人专注于创意科技与教育，提供Scratch编程资源、教育内容和创意作品。">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
@@ -68,49 +69,50 @@
             <img id="random-bg" src="" alt="随机背景" class="w-full h-full object-cover">
         </div>
     </div>
-    <body class="font-inter bg-light text-dark antialiased scroll-smooth">
-        <!-- 导航栏 -->
-        <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
-            <nav class="bg-primary/90 bg-blur shadow-md">
-                <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-                    <a href="#" class="flex items-center space-x-2">
-                        <img src="picture/LOGO/scratch'cat.png" alt="Scratch火柴人LOGO" class="w-10 h-10 rounded-full">
-                        <span class="text-xl font-bold text-dark">Scratch火柴人</span>
+
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 opacity-0">
+        <nav class="bg-primary/90 bg-blur shadow-md">
+            <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+                <a href="#" class="flex items-center space-x-2">
+                    <img src="picture\LOGO\scratch_cat.png" alt="Scratch火柴人LOGO" class="w-10 h-10 rounded-full">
+                    <span class="text-xl font-bold text-dark">Scratch火柴人</span>
+                </a>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#welcome" class="text-dark hover:text-accent transition-colors duration-200">首页</a>
+                    <a href="#news" class="text-dark hover:text-accent transition-colors duration-200">最新动态</a>
+                    <a href="#popular" class="text-dark hover:text-accent transition-colors duration-200">热门内容</a>
+                    <a href="#resources" class="text-dark hover:text-accent transition-colors duration-200">资源中心</a>
+                    <a href="#about" class="text-dark hover:text-accent transition-colors duration-200">关于我们</a>
+                    <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        关注博主
                     </a>
-                    
-                    <!-- 桌面导航 -->
-                    <div class="hidden md:flex items-center space-x-8">
-                        <a href="#welcome" class="text-dark hover:text-accent transition-colors duration-200">首页</a>
-                        <a href="#news" class="text-dark hover:text-accent transition-colors duration-200">最新动态</a>
-                        <a href="#popular" class="text-dark hover:text-accent transition-colors duration-200">热门内容</a>
-                        <a href="#resources" class="text-dark hover:text-accent transition-colors duration-200">附件中心</a>
-                        <a href="#about" class="text-dark hover:text-accent transition-colors duration-200">关于我们</a>
-                        <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                            关注博主
-                        </a>
-                    </div>
-                    
-                    <!-- 移动端菜单按钮 -->
-                    <button id="menu-toggle" class="md:hidden text-dark focus:outline-none">
-                        <i class="fa-solid fa-bars text-2xl"></i>
-                    </button>
                 </div>
                 
-                <!-- 移动端导航菜单 -->
-                <div id="mobile-menu" class="md:hidden hidden bg-primary/95 bg-blur">
-                    <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
-                        <a href="#welcome" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">首页</a>
-                        <a href="#news" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">最新动态</a>
-                        <a href="#popular" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">热门内容</a>
-                        <a href="#resources" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">资源中心</a>
-                        <a href="#about" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">关于我们</a>
-                        <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-center">
-                            关注博主
-                        </a>
-                    </div>
+                <!-- 移动端菜单按钮 -->
+                <button id="menu-toggle" class="md:hidden text-dark focus:outline-none">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- 移动端导航菜单 -->
+            <div id="mobile-menu" class="md:hidden hidden bg-primary/95 bg-blur">
+                <div class="container mx-auto px-4 py-3 flex flex-col space-y-4">
+                    <a href="#welcome" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">首页</a>
+                    <a href="#news" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">最新动态</a>
+                    <a href="#popular" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">热门内容</a>
+                    <a href="#resources" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">资源中心</a>
+                    <a href="#about" class="text-dark hover:text-accent transition-colors duration-200 py-2 border-b border-gray-200">关于我们</a>
+                    <a href="https://www.xiaohongshu.com/user/profile/639e71b100000000260117d8" target="_blank" class="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg text-center">
+                        关注博主
+                    </a>
                 </div>
-            </nav>
-        </header>
+            </div>
+        </nav>
+    </header>
+
     
         <!-- 欢迎部分 -->
         <section id="welcome" class="relative h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-secondary/10 to-primary/20">
