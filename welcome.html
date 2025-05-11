@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scratch火柴人</title>
-    <link rel="website icons" type="png" href="picture\LOGO\scratch_cat.png">
+    <link rel="icon" type="png" href="picture/LOGO/scratch_cat.png"> <!-- 修改图标路径 -->
     <meta name="description" content="Scratch火柴人专注于创意科技与教育，提供Scratch编程资源、教育内容和创意作品。">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
@@ -377,7 +377,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
                     <div>
                         <div class="flex items-center space-x-2 mb-6">
-                            <img src="picture/LOGO/scratch'cat.png" alt="Scratch火柴人LOGO" class="w-10 h-10 rounded-full">
+                            <img src="picture/LOGO/scratch_cat.png" alt="Scratch火柴人LOGO" class="w-10 h-10 rounded-full">
                             <span class="text-xl font-bold">Scratch火柴人</span>
                         </div>
                         <p class="text-gray-400 mb-6">专注于创意科技与教育，提供Scratch编程资源、教育内容和创意作品。</p>
@@ -426,123 +426,152 @@
         </footer>
 
     <script>
-        // 随机背景图
-        const randomBg = document.getElementById('random-bg');
-        const randomBgId = Math.floor(Math.random() * 100);
-        randomBg.src = `https://picsum.photos/id/${randomBgId}/1920/1080`;
-
-        // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', () => {
-            // 获取所有图片元素
-            const images = document.querySelectorAll('img');
-            const totalImages = images.length;
-            let loadedImages = 0;
-            
-            // 显示加载进度
-            const updateProgress = () => {
-                const progress = (loadedImages / totalImages) * 100;
-                console.log(`图片加载进度: ${progress}%`);
-            };
-            
-            // 检查所有图片是否加载完成
-            const checkAllImagesLoaded = () => {
-                if (loadedImages === totalImages) {
-                    // 所有图片加载完成，隐藏加载屏幕
-                    setTimeout(() => {
-                        document.getElementById('loading-screen').classList.add('fade-out');
-                        // 显示网页内容
-                        document.getElementById('navbar').style.opacity = '1';
-                        document.getElementById('welcome').style.opacity = '1';
-                        document.getElementById('news').style.opacity = '1';
-                        document.getElementById('popular').style.opacity = '1';
-                        document.getElementById('resources').style.opacity = '1';
-                        document.getElementById('about').style.opacity = '1';
-                        document.querySelector('footer').style.opacity = '1';
-                        // 允许页面滚动
-                        document.body.style.overflow = 'auto';
-                    }, 500); // 延迟一下，让淡入淡出效果更明显
-                }
-            };
-            
-            // 为每张图片添加加载事件
-            images.forEach(img => {
-                // 如果图片已经加载完成
-                if (img.complete) {
-                    loadedImages++;
-                    updateProgress();
-                    checkAllImagesLoaded();
-                } else {
-                    // 图片加载完成时
-                    img.addEventListener('load', () => {
-                        loadedImages++;
-                        updateProgress();
-                        checkAllImagesLoaded();
-                    });
-                    
-                    // 图片加载失败时
-                    img.addEventListener('error', () => {
-                        loadedImages++;
-                        console.error('图片加载失败:', img.src);
-                        updateProgress();
-                        checkAllImagesLoaded();
-                    });
-                }
+// 页面加载完成后执行
+document.addEventListener('DOMContentLoaded', () => {
+    // 跟踪加载状态
+    let isRandomBgLoaded = false;
+    let areOtherImagesLoaded = false;
+    
+    // 优先加载随机背景
+    const randomBg = document.getElementById('random-bg');
+    const randomBgId = Math.floor(Math.random() * 100);
+    
+    // 设置随机背景图并监听加载完成事件
+    randomBg.onload = function() {
+        console.log('随机背景加载完成');
+        isRandomBgLoaded = true;
+        checkAllLoaded();
+    };
+    
+    randomBg.onerror = function() {
+        console.error('随机背景加载失败');
+        isRandomBgLoaded = true; // 即使失败也继续加载其他内容
+        checkAllLoaded();
+    };
+    
+    // 先设置随机背景图的src，触发加载
+    randomBg.src = `https://picsum.photos/id/${randomBgId}/1920/1080?random=${Date.now()}`;
+    
+    // 获取除随机背景外的所有图片元素
+    const images = document.querySelectorAll('img:not(#random-bg)');
+    const totalImages = images.length;
+    let loadedImages = 0;
+    
+    // 显示加载进度
+    const updateProgress = () => {
+        const progress = (loadedImages / totalImages) * 100;
+        console.log(`图片加载进度: ${progress}%`);
+    };
+    
+    // 检查所有图片是否加载完成
+    const checkAllOtherImagesLoaded = () => {
+        if (loadedImages === totalImages) {
+            console.log('所有其他图片加载完成');
+            areOtherImagesLoaded = true;
+            checkAllLoaded();
+        }
+    };
+    
+    // 检查所有资源是否加载完成
+    const checkAllLoaded = () => {
+        if (isRandomBgLoaded && areOtherImagesLoaded) {
+            // 所有资源加载完成，隐藏加载屏幕
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('fade-out');
+                // 显示网页内容
+                document.getElementById('navbar').style.opacity = '1';
+                document.getElementById('welcome').style.opacity = '1';
+                document.getElementById('news').style.opacity = '1';
+                document.getElementById('popular').style.opacity = '1';
+                document.getElementById('resources').style.opacity = '1';
+                document.getElementById('about').style.opacity = '1';
+                document.querySelector('footer').style.opacity = '1';
+                // 允许页面滚动
+                document.body.style.overflow = 'auto';
+            }, 500); // 延迟一下，让淡入淡出效果更明显
+        }
+    };
+    
+    // 为每张图片添加加载事件
+    images.forEach(img => {
+        // 如果图片已经加载完成
+        if (img.complete) {
+            loadedImages++;
+            updateProgress();
+            checkAllOtherImagesLoaded();
+        } else {
+            // 图片加载完成时
+            img.addEventListener('load', () => {
+                loadedImages++;
+                updateProgress();
+                checkAllOtherImagesLoaded();
             });
             
-            // 如果没有图片或图片都已加载完成
-            if (totalImages === 0) {
-                checkAllImagesLoaded();
-            }
-            
-            // 导航栏滚动效果
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('bg-primary', 'shadow-md');
-                    navbar.classList.remove('bg-transparent');
-                } else {
-                    navbar.classList.remove('bg-primary', 'shadow-md');
-                    navbar.classList.add('bg-transparent');
-                }
+            // 图片加载失败时
+            img.addEventListener('error', () => {
+                loadedImages++;
+                console.error('图片加载失败:', img.src);
+                updateProgress();
+                checkAllOtherImagesLoaded();
             });
+        }
+    });
+    
+    // 如果没有其他图片
+    if (totalImages === 0) {
+        areOtherImagesLoaded = true;
+        checkAllLoaded();
+    }
+    
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-primary', 'shadow-md');
+            navbar.classList.remove('bg-transparent');
+        } else {
+            navbar.classList.remove('bg-primary', 'shadow-md');
+            navbar.classList.add('bg-transparent');
+        }
+    });
+    
+    // 移动端菜单切换
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
             
-            // 移动端菜单切换
-            const menuToggle = document.getElementById('menu-toggle');
-            const mobileMenu = document.getElementById('mobile-menu');
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
             
-            // 平滑滚动
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                        
-                        // 关闭移动端菜单
-                        if (!mobileMenu.classList.contains('hidden')) {
-                            mobileMenu.classList.add('hidden');
-                        }
-                    }
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
                 });
-            });
-            
-            // 添加淡入动画
-            const animateElements = document.querySelectorAll('.animate-fade-in');
-            animateElements.forEach(el => {
-                el.style.opacity = '1';
-                el.style.transform = 'translateY(0)';
-                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-            });
+                
+                // 关闭移动端菜单
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
         });
+    });
+    
+    // 添加淡入动画
+    const animateElements = document.querySelectorAll('.animate-fade-in');
+    animateElements.forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+    });
+});
     </script>
 </body>
-</html>    
+</html>
