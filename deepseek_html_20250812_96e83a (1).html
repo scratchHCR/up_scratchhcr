@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>告别时刻 | Scratch火柴人</title>
+    <!-- 添加标题栏图标 -->
+    <link rel="icon" href="icon.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #111;
+            overflow: auto; /* 允许页面滚动 */
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .poem-text {
+            font-family: 'Ma Shan Zheng', cursive;
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            letter-spacing: 2px;
+            line-height: 1.3;
+        }
+        
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: -1;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .fade-out {
+            animation: fadeOut 1s ease-out forwards;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            margin: 15px auto 25px;
+            border-radius: 50%;
+            background-color: #F1EEBD;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 20px rgba(241, 238, 189, 0.5);
+        }
+        
+        .logo-inner {
+            width: 50px;
+            height: 50px;
+            background-color: #333;
+            border-radius: 50%;
+        }
+        
+        .bg-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+        
+        .card-content {
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover .card-content {
+            transform: translateY(-5px);
+        }
+        
+        .access-section {
+            width: 100%;
+            max-width: 900px;
+            margin: 40px auto 30px;
+        }
+        
+        .access-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #F1EEBD;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 107, 53, 0.3);
+            display: inline-block;
+        }
+        
+        .access-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .access-table th {
+            background: rgba(255, 107, 53, 0.2);
+            padding: 12px 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* 列分隔线 */
+        .access-table th:not(:last-child),
+        .access-table td:not(:last-child) {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .access-table td {
+            padding: 10px 15px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 50px;
+        }
+        
+        .access-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .access-link {
+            color: #F1EEBD;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+        }
+        
+        .access-link:hover {
+            background: rgba(241, 238, 189, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .access-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        @media (max-width: 768px) {
+            .access-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .access-table th,
+            .access-table td {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+            
+            .access-link {
+                padding: 4px 6px;
+                font-size: 0.85rem;
+            }
+            
+            .access-title {
+                font-size: 1.3rem;
+            }
+            
+            .card-grid {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            /* 移动端调整网易云插件 */
+            .netease-player-container {
+                width: 300px !important;
+                left: 10px !important;
+            }
+            
+            .netease-player-container iframe {
+                width: 300px !important;
+            }
+        }
+        
+        .loading-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+        }
+        
+        .copyright {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        /* 新增音乐控制样式 */
+        .music-icon {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #F1EEBD;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(241, 238, 189, 0.5);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s ease 6s forwards;
+        }
+        
+        .music-icon:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(241, 238, 189, 0.7);
+        }
+        
+        .music-icon i {
+            font-size: 24px;
+            color: #333;
+        }
+        
+        /* 网易云音乐播放器容器 */
+        .netease-player-container {
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            width: 330px;
+            height: 85px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            z-index: 1001;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        .netease-player-container.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .netease-player-container iframe {
+            width: 330px;
+            height: 86px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .close-netease-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: none;
+            border: none;
+            color: #F1EEBD;
+            font-size: 14px;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .close-netease-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#F1EEBD',
+                        secondary: '#8A9A5B',
+                        accent: '#FF6B35',
+                        dark: '#333333',
+                        light: '#F9F9F9'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- 背景层 -->
+    <img id="random-bg" alt="背景" class="bg-image">
+    <div class="bg-overlay"></div>
+
+    <!-- 加载动画 -->
+    <div id="loading-screen" class="loading-container">
+        <div class="text-center relative z-20">
+            <div class="w-16 h-16 border-4 border-[#F1EEBD] border-t-[#FF6B35] rounded-full animate-spin mx-auto mb-6"></div>
+            <p class="text-white text-xl">正在加载中...</p>
+            <p class="text-gray-400 mt-2">请稍候，我们正在准备精彩内容</p>
+        </div>
+    </div>
+
+    <!-- 临时消息 - 分别是为了更好的再见 -->
+    <div id="temporary-message" class="container hidden">
+        <h2 class="text-4xl md:text-5xl text-[#F1EEBD] font-bold text-center fade-in">
+            分别是为了更好的再见
+        </h2>
+    </div>
+
+    <!-- 永久内容 -->
+    <div id="permanent-content" class="container hidden">
+        <div class="flex justify-center">
+            <div class="logo">
+                <div class="logo-inner"></div>
+            </div>
+        </div>
+        
+        <!-- 单行显示的诗句 -->
+        <h1 class="poem-text text-4xl md:text-5xl text-[#F1EEBD] mb-6 mt-4 text-center">
+            难舍一段过往，缘尽又何妨？
+        </h1>
+        
+        <!-- 更新后的内容 -->
+        <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 text-center">
+            感谢您一路以来的陪伴与支持，博主今年初二，因即将面临生物和地理考试，该网站暂停更新与服务，计划将于明年1月中旬再次开放
+        </p>
+        
+        <div class="flex flex-col md:flex-row justify-center gap-8 w-full max-w-4xl mx-auto">
+            <div class="card bg-[#F1EEBD]/20 backdrop-blur-sm rounded-xl border border-[#F1EEBD]/30 overflow-hidden">
+                <div class="card-content p-6">
+                    <h3 class="text-xl font-bold text-[#F1EEBD] mb-3">曾经的点滴</h3>
+                    <p class="text-gray-300">
+                        从创意编程到科技分享<br>
+                        每一个项目都是成长的见证<br>
+                        每一次探索都是珍贵的回忆<br>
+                        感谢您的一路相伴
+                    </p>
+                </div>
+            </div>
+            
+            <div class="card bg-[#8A9A5B]/20 backdrop-blur-sm rounded-xl border border-[#8A9A5B]/30 overflow-hidden">
+                <div class="card-content p-6">
+                    <h3 class="text-xl font-bold text-[#8A9A5B] mb-3">未来的期许</h3>
+                    <p class="text-gray-300">
+                        暂时的告别是为了更好的重逢<br>
+                        专注学业，迎接新的挑战<br>
+                        期待明年以更好的姿态回归<br>
+                        继续分享创意与科技
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 资源访问表格 -->
+        <div class="access-section fade-in" style="animation-delay: 0.3s">
+            <div class="access-title">您仍然可以访问以下内容：</div>
+            
+            <table class="access-table">
+                <thead>
+                    <tr>
+                        <th>蛋仔地图系列</th>
+                        <th>最新发布的视频</th>
+                        <th>附件表</th>
+                        <th>其他</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <a href="#" class="access-link">致追求梦想的人</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">开学之歌（新）</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">附件表网站</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">汇委学科工作室</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" class="access-link">2D 跑酷</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">Scratch 做应用</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">123 云盘下载</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">火柴云（原大牙科技）</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a href="#" class="access-link">书海自动</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">没好的一天</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">Yukaiqi 银盘下载</a>
+                        </td>
+                        <td>
+                            <a href="#" class="access-link">UP 主主页</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="copyright text-center">
+            <p class="text-gray-500">Scratch火柴人 © 2025 | 期待与您再次相见</p>
+        </div>
+    </div>
+
+    <!-- 音乐图标 -->
+    <div class="music-icon hidden" id="musicIcon">
+        <i class="fas fa-music"></i>
+    </div>
+    
+    <!-- 网易云音乐播放器容器 -->
+    <div class="netease-player-container" id="neteasePlayer">
+        <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" 
+                src="//music.163.com/outchain/player?type=2&id=2158565846&auto=1&height=66"></iframe>
+        <button id="closeNetease" class="close-netease-btn">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingScreen = document.getElementById('loading-screen');
+            const temporaryMessage = document.getElementById('temporary-message');
+            const permanentContent = document.getElementById('permanent-content');
+            const randomBg = document.getElementById('random-bg');
+            const musicIcon = document.getElementById('musicIcon');
+            const neteasePlayer = document.getElementById('neteasePlayer');
+            const closeNetease = document.getElementById('closeNetease');
+            
+            // 生成随机背景ID（1-1000）
+            const randomBgId = Math.floor(Math.random() * 1000) + 1;
+            const bgUrl = `https://picsum.photos/id/${randomBgId}/1920/1080`;
+            randomBg.src = bgUrl;
+            
+            // 跟踪背景是否加载完成
+            let bgLoaded = false;
+            
+            // 背景加载完成时
+            randomBg.onload = function() {
+                bgLoaded = true;
+                startPageTransition();
+            };
+            
+            // 背景加载失败时
+            randomBg.onerror = function() {
+                // 使用备用背景
+                randomBg.src = 'https://picsum.photos/1920/1080?random=' + Date.now();
+                bgLoaded = true;
+                startPageTransition();
+            };
+            
+            // 开始页面过渡
+            function startPageTransition() {
+                if (!bgLoaded) return;
+                
+                // 隐藏加载界面
+                loadingScreen.classList.add('hidden');
+                
+                // 显示临时消息并淡入
+                temporaryMessage.classList.remove('hidden');
+                temporaryMessage.classList.add('fade-in');
+                
+                // 5秒后隐藏临时消息
+                setTimeout(() => {
+                    // 淡出临时消息
+                    temporaryMessage.classList.add('fade-out');
+                    
+                    // 淡出完成后显示永久内容
+                    setTimeout(() => {
+                        temporaryMessage.classList.add('hidden');
+                        permanentContent.classList.remove('hidden');
+                        permanentContent.classList.add('fade-in');
+                        
+                        // 显示音乐图标
+                        musicIcon.classList.remove('hidden');
+                        
+                        // 允许页面滚动
+                        document.body.style.overflow = 'auto';
+                    }, 1000);
+                }, 5000);
+            }
+            
+            // 设置超时以防背景加载时间过长
+            setTimeout(() => {
+                if (!bgLoaded) {
+                    startPageTransition();
+                }
+            }, 8000);
+            
+            // 音乐图标点击事件 - 显示网易云播放器
+            musicIcon.addEventListener('click', () => {
+                musicIcon.classList.add('hidden');
+                neteasePlayer.classList.add('show');
+            });
+            
+            // 关闭按钮点击事件 - 隐藏网易云播放器
+            closeNetease.addEventListener('click', () => {
+                neteasePlayer.classList.remove('show');
+                setTimeout(() => {
+                    musicIcon.classList.remove('hidden');
+                }, 300);
+            });
+            
+            // 点击网易云播放器外部关闭播放器
+            document.addEventListener('click', (e) => {
+                const isPlayer = neteasePlayer.contains(e.target);
+                const isIcon = musicIcon.contains(e.target);
+                
+                if (!isPlayer && !isIcon && neteasePlayer.classList.contains('show')) {
+                    neteasePlayer.classList.remove('show');
+                    musicIcon.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
